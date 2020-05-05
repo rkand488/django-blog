@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.shortcuts import redirect, render_to_response, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
 from blog.forms import PostForm, CommentForm
