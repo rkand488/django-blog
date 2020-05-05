@@ -1,0 +1,21 @@
+{% extends "layout.html" %} {% block title %} {{title}} {% endblock %} {% block style %} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/summernote/summernote-bs4.min.css' %}" /> {% endblock %} {% block content %} {% load crispy_forms_tags %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{title}}</h2>
+        <form action="" method="POST" novalidate>
+            {% csrf_token %} {{ form | crispy }}
+            <button type="submit" class="btn btn-success btn-flat" name="add">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script src="{% static 'plugins/summernote/summernote-bs4.min.js' %}"></script>
+<script>
+    $('#id_text').summernote({
+        placeholder: 'Write here...',
+        tabsize: 2,
+        height: 300
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+{
+  "python.formatting.provider": "yapf",
+  "python.pythonPath": "C:\\Users\\Rakesh\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+  },
+  "emmet.includeLanguages": { "django-html": "html" }
+}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block title %} {% endblock %} {% block style %} {% endblock %} {% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Post archives for week {{ week|date:"W" }}, {{ week|date:"Y" }}</h2>
+
+        <ul>
+            {% for post in object_list %}
+            <li>
+                <a href="{% url blog_post_detail post.slug %}">{{ post.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h1>Week {{ week|date:'W' }}</h1>
+
+        <ul>
+            {% for article in object_list %}
+            <li>{{ article.created_at|date:"F j, Y" }}: {{ article.title }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>
+            {% if previous_week %} Previous Week: {{ previous_week|date:"W" }} of year {{ previous_week|date:"Y" }} {% endif %} {% if previous_week and next_week %}--{% endif %} {% if next_week %} Next week: {{ next_week|date:"W" }} of year {{ next_week|date:"Y"
+            }} {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %} {% block script %} {% endblock %}

@@ -1,0 +1,52 @@
+{% extends "layout.html" %} {% block title %} Home {% endblock %} {% block style %}{% endblock %} {% block content %}
+<div class="row">
+    <div class="col-sm-8">
+        {% if post_list %} {% for post in post_list %}
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-secondary">
+                <div class="row" post-index="{{ forloop.counter }}">
+                    <div class="col-lg-2 col-md-2 col-sm-4">
+                        <img src="{{post.get_thumbnail}}" class="img-responsive img-thumbnail" />
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-6">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <p class="card-text"><small class="text-muted">{{ post.created_at }}</small></p>
+                        <div class="card-text">{{ post.excerpt}}</div>
+                        <a href="{% url 'view_post' post.slug %}" class="card-link">Read more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %} {% else %}
+        <p>Data not found.</p>
+        {% endif %}
+    </div>
+    <div class="col-sm-4">
+        <div class="card border-secondary mb-3">
+            <div class="card-body text-secondary">
+                <h2>About Me</h2>
+                <h5>Photo of me:</h5>
+                <div class="fakeimg">Fake Image</div>
+                <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+                <h3>Some Links</h3>
+                <p>Lorem ipsum dolor sit ame.</p>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <hr class="d-sm-none">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block script %} {% endblock %}

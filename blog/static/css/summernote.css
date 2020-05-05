@@ -1,0 +1,4 @@
+label[for=id_text]+textarea+.note-editor {
+    float: right;
+    width: calc(100% - 170px);
+}
