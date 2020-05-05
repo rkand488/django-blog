@@ -14,6 +14,52 @@
             background-color: #f5f3f3;
         }
 
+        /*SEARCH*/
+        .searchbar{
+        margin-bottom: auto;
+        margin-top: auto;
+        height: 40px;
+        background-color: #ffffff;
+        border-radius: 30px;
+        padding: 0;
+        }
+
+        .search_input{
+        color: #777777;
+        border: 0;
+        outline: 0;
+        background: none;
+        width: 0;
+        caret-color:transparent;
+        line-height: 30px;
+        transition: width 0.4s linear;
+        }
+
+        .searchbar:hover > .search_input{
+        padding:5px 5px 5px 15px;
+        width: 200px;
+        caret-color:red;
+        transition: width 0.4s linear;
+        }
+
+        .searchbar:hover > .search_icon{
+        background: white;
+        color: #e74c3c;
+        text-decoration:none;
+        }
+
+        .search_icon{
+        height: 40px;
+        width: 40px;
+        float: right;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        color:#cccccc;
+        text-decoration:none;
+        }
+
         /*FOOTER*/
         footer {
         background: #16222A;
@@ -148,22 +194,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                 </li>
-                {% comment %} {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post' %}">Post</a>
-                </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}?next=/">{{ user.username }} : Logout</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="/admin">Login</a>
                 </li>
-                {% endif %} {% endcomment %}
+                {% endif %}
             </ul>
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <form class="form-inline" method="GET" action="javascript:void(0);" novalidate>
+                <div class="searchbar">
+                    <input class="search_input" name="q" type="text" value="{{ request.GET.q }}" placeholder="Search...">
+                    <a href="javascript:void(0);" class="search_icon"><i class="fas fa-search"></i></a>
+                </div>
             </form>
         </div>
     </nav>
@@ -239,6 +284,22 @@
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+    (function($){
+        $("body").on("keyup",".searchbar .search_input", function(){
+            if(this.value){
+                $(this).closest("form").attr("action","{% url 'search' %}");
+            }else{
+                $(this).closest("form").attr("action","javascript:void(0);");
+            }
+        });
+        $("body").on("click",".searchbar .search_icon", function(){
+            if($(".searchbar .search_input").val()){
+                $(this).closest("form").submit();
+            }
+        });
+    })(jQuery);
+</script>
 {% block script %} {% endblock %}
 
 </html>

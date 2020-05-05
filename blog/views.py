@@ -1,7 +1,7 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
 from blog.forms import PostForm, CommentForm
@@ -13,6 +13,16 @@ from django.views.generic.dates import MonthArchiveView, WeekArchiveView
 def home(request):
     post_list = Post.objects.all()
     return render(request, "home.html", {'post_list': post_list})
+
+
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        post_list = Post.objects.filter(
+            Q(title__contains=query) | Q(text__contains=query)).distinct()
+        return render(request, 'search.html', {'post_list': post_list})
+    else:
+        return render(request, "search.html", {'post_list': []})
 
 
 def about(request):
