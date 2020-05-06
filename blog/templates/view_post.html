@@ -85,6 +85,14 @@
                     {{ post.text|safe }}
                 </div>
                 <p class="card-text"><small class="text-muted"> Written by {{ post.author }}  on {{ post.created_at }} </small></p>
+                <div class="clearfix">
+                    {% if post.prev_post %}
+                        <a href="{{post.prev_post.get_absolute_url}}" class="badge badge-pill badge-info float-left">Previous</a>
+                    {% endif %}
+                    {% if post.next_post %}
+                        <a href="{{post.next_post.get_absolute_url}}" class="badge badge-pill badge-info float-right">Next</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

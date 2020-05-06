@@ -8,18 +8,35 @@ from blog.forms import PostForm, CommentForm
 from blog.models import Post, Comment
 from django.views.generic import ListView
 from django.views.generic.dates import MonthArchiveView, WeekArchiveView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home(request):
-    post_list = Post.objects.all()
+    page = request.GET.get('page', 1)
+    posts = Post.objects.all()
+    paginator = Paginator(posts, 10)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
+    except EmptyPage:
+        post_list = paginator.page(paginator.num_pages)
     return render(request, "home.html", {'post_list': post_list})
 
 
 def search(request):
     if request.method == 'GET':
         query = request.GET.get('q')
-        post_list = Post.objects.filter(
+        page = request.GET.get('page', 1)
+        posts = Post.objects.filter(
             Q(title__contains=query) | Q(text__contains=query)).distinct()
+        paginator = Paginator(posts, 10)
+        try:
+            post_list = paginator.page(page)
+        except PageNotAnInteger:
+            post_list = paginator.page(1)
+        except EmptyPage:
+            post_list = paginator.page(paginator.num_pages)
         return render(request, 'search.html', {'post_list': post_list})
     else:
         return render(request, "search.html", {'post_list': []})
@@ -56,6 +73,8 @@ def add_post(request, id=None):
 
 def view_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
+    post.prev_post = (Post.objects.filter(id__lt=post.id).first())
+    post.next_post = (Post.objects.filter(id__gt=post.id).first())
     form = CommentForm(request.POST or None)
     if form.is_valid():
         comment = form.save(commit=False)

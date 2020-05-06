@@ -9,12 +9,12 @@ from blog.forms import PostForm, CommentForm
 class PostAdmin(admin.ModelAdmin):
     form = PostForm
 
-    search_fields = ['title', 'author__first_name']
-    list_display = ('title', 'created_at', 'author')
-    list_filter = ('author', 'created_at')
+    search_fields = ['title', 'author__first_name', 'status']
+    list_display = ('title', 'created_at', 'author', 'status')
+    list_filter = ('author', 'created_at', 'status')
     readonly_fields = ('created_at', 'updated_at', 'slug')
     fieldsets = ((None, {
-        'fields': ('title', 'text')
+        'fields': ('title', 'status', 'text')
     }), ('Other Information', {
         'fields': ('created_at', 'updated_at', 'slug'),
         'classes': ('collapse', )
@@ -29,7 +29,7 @@ class PostAdmin(admin.ModelAdmin):
         css = {'all': ('plugins/summernote/summernote-lite.css', )}
 
     def save_model(self, request, obj, form, change):
-        if not obj.author.id:
+        if getattr(obj, 'author', None) is None:
             obj.author = request.user
         obj.save()
 

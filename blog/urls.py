@@ -2,6 +2,13 @@ from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
 from blog import views
 from blog.models import Post
+from django.contrib.sitemaps.views import sitemap
+from blog.sitemaps import PostSitemap
+from blog.feeds import LatestPostsFeed
+
+sitemaps = {
+    "posts": PostSitemap,
+}
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -9,7 +16,7 @@ urlpatterns = [
     re_path(r"^(?P<slug>[-\w]+)/$", views.view_post, name="view_post"),
     path("about", views.about, name="about"),
     path("contact", views.contact, name="contact"),
-    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     # path("post", views.post, name="post"),
     # path("post/<id>", views.add_post, name="edit_post"),
     # path("add-post", views.add_post, name="add_post"),
@@ -23,4 +30,6 @@ urlpatterns = [
         views.PostWeekArchiveView.as_view(),
         name='archive_week',
     ),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path("feed/rss", LatestPostsFeed(), name="post_feed"),
 ]

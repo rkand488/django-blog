@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 import re
 from datetime import datetime
 from django.utils import timezone
@@ -8,6 +7,11 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 from django.contrib.auth.models import User
 from blog.helper import HTMLStripper
+
+STATUS_CHOICES = (
+    (0, 'Draft'),
+    (1, 'Publish'),
+)
 
 
 class Post(models.Model):
@@ -20,11 +24,16 @@ class Post(models.Model):
         User,
         on_delete=models.CASCADE,
     )
+    status = models.IntegerField(choices=STATUS_CHOICES, default=0)
+
+    class Meta:
+        ordering = ["-created_at"]
 
     def __unicode__(self):
         return self.title
 
     def get_absolute_url(self):
+        from django.urls import reverse
         return reverse("view_post", args=[self.slug])
 
     def get_thumbnail(self):
