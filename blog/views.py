@@ -1,9 +1,6 @@
-from datetime import datetime
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
-from django.template import RequestContext
 from blog.forms import PostForm, CommentForm
 from blog.models import Post, Comment
 from django.views.generic import ListView

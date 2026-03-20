@@ -1,7 +1,5 @@
 from django.db import models
 import re
-from datetime import datetime
-from django.utils import timezone
 from django.template.defaultfilters import slugify
 
 # Create your models here.
@@ -29,7 +27,7 @@ class Post(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
@@ -37,7 +35,7 @@ class Post(models.Model):
         return reverse("view_post", args=[self.slug])
 
     def get_thumbnail(self):
-        p = re.compile('src="(data:image\/[^;]+;base64[^"]+)"')
+        p = re.compile(r'src="(data:image/[^;]+;base64[^"]+)"')
         matcher = p.findall(self.text)
         if len(matcher) > 0:
             return matcher[0]
@@ -48,10 +46,9 @@ class Post(models.Model):
         s.feed(self.text)
         no_tags = s.get_data()
         limit = 60
-        append_str = "..."
         if len(no_tags) > limit:
-            return no_tags[0:limit:]
-        return no_tags + append_str
+            return no_tags[0:limit] + "..."
+        return no_tags
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -71,5 +68,5 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
